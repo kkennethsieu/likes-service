@@ -11,8 +11,8 @@ const router = express.Router();
 router.get("/review/:reviewId", getReactionsByReview);
 
 //Like a review or remove like a review if already liked
-router.post("/like/:userId/:reviewId", likeReview);
+router.post("/like/:userId/:reviewId/:authorId", likeReview);
 
 //Dislike a review or remove dislike if already disliked
-router.post("/dislike/:userId/:reviewId", dislikeReview);
+router.post("/dislike/:userId/:reviewId/:authorId", dislikeReview);
 export default router;
