@@ -1,5 +1,4 @@
 import db from "../db/db.js";
-import { getAuthorId } from "../services/likesService.js";
 import publishNotification from "../services/notificationService.js";
 
 export const getReactionsByReview = (req, res) => {
@@ -29,7 +28,7 @@ export const getReactionsByReview = (req, res) => {
 };
 
 export const likeReview = async (req, res) => {
-  const { userId, reviewId } = req.params;
+  const { userId, reviewId, authorId } = req.params;
 
   try {
     const stmt = db.prepare(
@@ -56,11 +55,10 @@ export const likeReview = async (req, res) => {
 
       // Send notification - fire and forget (don't let it break the response)
       try {
-        const author = await getAuthorId(reviewId);
-        if (author) {
+        if (authorId) {
           await publishNotification({
             senderId: userId,
-            receiverId: author,
+            receiverId: authorId,
             entityId: reviewId,
             type: "review_liked",
           });
@@ -78,7 +76,7 @@ export const likeReview = async (req, res) => {
 };
 
 export const dislikeReview = async (req, res) => {
-  const { userId, reviewId } = req.params;
+  const { userId, reviewId, authorId } = req.params;
 
   try {
     const stmt = db.prepare(
@@ -105,11 +103,10 @@ export const dislikeReview = async (req, res) => {
 
       // Send notification - fire and forget (don't let it break the response)
       try {
-        const author = await getAuthorId(reviewId);
-        if (author) {
+        if (authorId) {
           await publishNotification({
             senderId: userId,
-            receiverId: author,
+            receiverId: authorId,
             entityId: reviewId,
             type: "review_disliked",
           });
