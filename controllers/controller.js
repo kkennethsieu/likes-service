@@ -99,20 +99,6 @@ export const dislikeReview = async (req, res) => {
         "INSERT INTO reviewLikes (userId, reviewId, isLike) VALUES (?,?,0)"
       ).run(userId, reviewId);
 
-      // Send notification - fire and forget (don't let it break the response)
-      try {
-        if (authorId) {
-          await publishNotification({
-            senderId: userId,
-            receiverId: authorId,
-            entityId: reviewId,
-            type: "review_disliked",
-          });
-        }
-      } catch (notifyError) {
-        console.error("Failed to send notification:", notifyError.message);
-      }
-
       return res.status(201).json({ message: "Successfully disliked review" });
     }
   } catch (error) {
