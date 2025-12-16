@@ -8,7 +8,7 @@ function createTestLikeReaction() {
     .prepare(
       `
       INSERT INTO reviewLikes (userId, reviewId, isLike)
-      VALUES (?, ?, ?)
+      VALUES (?, ?, ?) 
     `
     )
     .run(1, 1, 1);
