@@ -38,10 +38,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # 6. Login to Amazon ECR
-      - name: Login to Amazon ECR
+      # 6. Login to PUBLIC ECR
+      - name: Login to Amazon ECR Public
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
+        with:
+          registry-type: public
 
       # 7. Build Docker image
       - name: Build Docker image
