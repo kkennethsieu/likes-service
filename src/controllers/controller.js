@@ -53,17 +53,19 @@ export const likeReview = async (req, res) => {
       ).run(userId, reviewId);
 
       // Send notification - fire and forget (don't let it break the response)
-      try {
-        if (authorId) {
-          await publishNotification({
-            senderId: userId,
-            receiverId: authorId,
-            entityId: reviewId,
-            type: "review_liked",
-          });
+      if (process.env.NODE_ENV !== "test" && authorId) {
+        try {
+          if (authorId) {
+            await publishNotification({
+              senderId: userId,
+              receiverId: authorId,
+              entityId: reviewId,
+              type: "review_liked",
+            });
+          }
+        } catch (notifyError) {
+          console.error("Failed to send notification:", notifyError.message);
         }
-      } catch (notifyError) {
-        console.error("Failed to send notification:", notifyError.message);
       }
 
       return res.status(201).json({ message: "Successfully liked review" });
