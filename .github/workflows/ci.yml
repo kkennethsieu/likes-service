@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_ENV: test
-      ECR_REPOSITORY: likes-service
     steps:
       # 1. Checkout repo
       - name: Checkout repository
@@ -48,7 +47,8 @@ jobs:
       # 7. Build Docker image
       - name: Build Docker image
         run: |
-          IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:pr-${{ github.event.pull_request.number }}
+          IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:pr-${{ github.event.pull_request.number }}
+
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
           docker build -t $IMAGE_URI .
 
